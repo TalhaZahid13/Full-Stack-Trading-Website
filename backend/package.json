@@ -157,8 +157,8 @@
     "wkx": "^0.5.0",
     "xtend": "^4.0.2"
   },
-  "devDependencies": {},
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

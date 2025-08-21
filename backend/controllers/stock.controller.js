@@ -1,49 +1,63 @@
-import Stock from '../models/stock.model.js';
+import { Readable } from 'stream';
 import csv from 'csv-parser';
-import fs from 'fs';
-export const uploadCSV = (req, res) => 
+import stocks from '../models/stock.model.js';
+export const uploadCsvStock = async (req, res) => 
 {
-    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+  try 
+  {
+    if (!req.file) 
+    {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
     const results = [];
-    fs.createReadStream(req.file.path)
-    .pipe(csv())
-    .on('data', (data) => 
-    {
-        results.push(
-        {
-            symbol: data.symbol,
-            name: data.name,
-            last_price: parseFloat(data.last_price),
-            change_percent: parseFloat(data.change_percent),
-            volume: data.volume ? parseInt(data.volume) : null,
+    const stream = Readable.from(req.file.buffer);
+    stream
+      .pipe(csv())
+      .on('data', (data) => {
+        results.push({
+          date: data['Date'],
+          symbol: data['Symbol']?.trim(),
+          code: data['Code'],
+          companyname: data['Company Name']?.trim(),
+          openprice: parseFloat(data['Open Price']),
+          highprice: parseFloat(data['High Price']),
+          lowprice: parseFloat(data['Low Price']),
+          closeprice: parseFloat(data['Close Price']),
+          volume: parseInt(data['Volume']),
+          previousclose: parseFloat(data['Previous Close']),
         });
-    })
-    .on('end', async () => 
-    {
+      })
+      .on('end', async () => {
         try 
         {
-            for (const stockData of results) 
-            {
-                await Stock.upsert(stockData);
-            }
-            fs.unlinkSync(req.file.path);
-            res.json({ message: 'CSV uploaded and stocks updated', count: results.length });
+          await stocks.bulkCreate(results, { ignoreDuplicates: true });
+          res.status(200).json({ message: 'CSV uploaded successfully', data: results });
         } 
-        catch (err) 
+        catch (bulkError) 
         {
-            res.status(500).json({ error: err.message });
+          console.error('Error saving to database:', bulkError);
+          res.status(500).json({ error: 'Database error while uploading CSV data' });
         }
-    });
+      });
+  } 
+  catch (error) 
+  {
+    console.error('Upload error:', error);
+    res.status(500).json({ error: `Error processing CSV file: ${error.message}` });
+  }
 };
-export const list = async (req, res) => 
+export const getAllStocks = async (req, res) => 
 {
-    try 
-    {
-        const stocks = await Stock.findAll();
-        res.json(stocks);
-    } 
-    catch (err) 
-    {
-        res.status(500).json({ error: err.message });
-    }
+  try 
+  {
+    const stockList = await stocks.findAll({
+      attributes: ['symbol', 'companyname', 'closeprice', 'openprice', 'volume'],
+    });
+    res.status(200).json(stockList);
+  }
+  catch (error) 
+  {
+    console.error('Error fetching stocks:', error);
+    res.status(500).json({ message: 'Failed to fetch stocks' });
+  }
 };

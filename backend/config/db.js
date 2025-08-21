@@ -3,15 +3,15 @@ import dotenv from 'dotenv';
 dotenv.config();
 export const sequelize = new Sequelize
 (
-  process.env.DB_NAME || 'jwt_auth',
-  process.env.DB_USER,
-  process.env.DB_PASS || '',
+  process.env.DB_NAME || 'jwt_auth',   
+  process.env.DB_USER,                 
+  process.env.DB_PASS || '',           
   {
-    host: process.env.DB_HOST || 'localhost',
+    host: process.env.DB_HOST,
     port: 3306,
-    dialect: 'mysql',
+    dialect: process.env.DB_DIALECT || 'mysql',
     logging: false,
-    pool:
+    pool: 
     {
       max: 10,
       min: 0,
@@ -27,13 +27,16 @@ export const sequelize = new Sequelize
 );
 export async function testConnection() 
 {
+  console.log("✅ Dialect:", process.env.DB_DIALECT);
+  console.log("✅ Host:", process.env.DB_HOST);
   try 
   {
     await sequelize.authenticate();
-    console.log('MySQL connection has been established successfully with ' + process.env.DB_NAME);
+    console.log('✅ MySQL connection has been established successfully with ' + process.env.DB_NAME);
   } 
   catch (error) 
   {
-    console.error('Unable to connect to MySQL database:', error);
+    console.error('❌ Unable to connect to MySQL database:', error);
   }
 }
+export default sequelize;

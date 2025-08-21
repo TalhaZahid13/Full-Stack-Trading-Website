@@ -6,7 +6,6 @@ const Customer = sequelize.define('customer',
   email: { type: DataTypes.STRING, allowNull: false },
   phone: { type: DataTypes.STRING },
   cnic: { type: DataTypes.STRING, allowNull: false },
-  customer_no: { type: DataTypes.STRING, allowNull: false, unique: true }
 }, 
 {
   timestamps: true,

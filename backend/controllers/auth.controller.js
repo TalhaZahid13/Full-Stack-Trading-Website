@@ -21,19 +21,20 @@ export async function signup(req, res)
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create(
     {
-        full_name,
-        email,
-        password: hashedPassword
-      }
-    );
-    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET,
+      full_name,
+      email,
+      password: hashedPassword
+    });
+    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, 
     {
       expiresIn: '2h'
     });
-    return res.status(201).json({
+    return res.status(201).json(
+    {
       message: 'Signup successful',
       token,
-      user: {
+      user: 
+      {
         id: user.id,
         full_name: user.full_name,
         email: user.email
@@ -42,7 +43,7 @@ export async function signup(req, res)
   } 
   catch (error) 
   {
-    console.error('signup error:', error);
+    console.error('Signup error:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
@@ -83,7 +84,7 @@ export async function login(req, res)
   } 
   catch (error) 
   {
-    console.error('login error:', error);
+    console.error('Login error:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
@@ -91,7 +92,7 @@ export async function profile(req, res)
 {
   try 
   {
-    const user = await User.findByPk(req.user.id, 
+    const user = await User.findByPk(req.user.id,
     {
       attributes: ['id', 'full_name', 'email']
     });
@@ -103,7 +104,7 @@ export async function profile(req, res)
   } 
   catch (error) 
   {
-    console.error('profile error:', error);
+    console.error('Profile error:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
 }

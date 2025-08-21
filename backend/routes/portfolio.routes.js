@@ -1,6 +1,10 @@
 import express from 'express';
-import { create, list } from '../controllers/portfolio.controller.js';
+import { authenticate } from '../middleware/auth.middleware.js';
+import verifyToken from '../middleware/portfolio.middleware.js';
 const router = express.Router();
-router.post('/', create);
-router.get('/', list);
+import 
+{ 
+    getAllPortfolios 
+} from '../controllers/portfolio.controller.js';
+router.get('/', verifyToken, authenticate, getAllPortfolios);
 export default router;

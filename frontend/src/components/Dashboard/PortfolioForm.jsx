@@ -1,51 +1,119 @@
-import { useState } from 'react';
-import { TextField, Button, Paper, Typography, Snackbar, Alert } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import axios from '../../api/axios';
-export default function PortfolioForm() 
+import 
+{ 
+  Table, 
+  TableHead, 
+  TableRow,
+  TableCell, 
+  TableBody, 
+  Paper, 
+  Typography, 
+  CircularProgress 
+} from '@mui/material';
+export default function PortfolioScreen() 
 {
-    const [formData, setFormData] = useState(
+  const [portfolio, setPortfolio] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => 
+  {
+    const fetchPortfolio = async () => 
     {
-        portfolio_name: '',
-        initial_capital: '',
-        customer_no: ''
-    });
-    const [error, setError] = useState(null);
-    const [successOpen, setSuccessOpen] = useState(false);
-    const handleChange = e => 
-    {
-        setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-    };
-    const handleSubmit = async e => 
-    {
-        e.preventDefault();
-        try 
+      try 
+      {
+        const response = await axios.get('/portfolio');
+        let data = response.data;
+        if (!Array.isArray(data)) 
         {
-            await axios.post('/portfolios', 
-            {
-                ...formData,
-                initial_capital: parseFloat(formData.initial_capital)
-            });
-            setSuccessOpen(true);
-            setFormData({ portfolio_name: '', initial_capital: '', customer_no: '' });
-        } 
-        catch (err) 
-        {
-            setError(err.response?.data?.error || 'Failed to create portfolio');
+          data = data.portfolio || []; 
         }
+        const formattedData = data.map((item) => 
+        {
+          const avgBuyPrice = parseFloat(item.avgBuyPrice) || 0;
+          const currentValue = parseFloat(item.marketValue) || 0;
+          const quantity = parseFloat(item.qty) || 0;
+          const  profitLoss = ((currentValue - avgBuyPrice) * quantity);
+          return {
+            ...item,
+            avgBuyPrice,
+            currentValue,
+            quantity,
+            profitLoss,
+          };
+        });
+        setPortfolio(formattedData);
+      } 
+      catch (error) 
+      {
+        console.error('Failed to load portfolio', error);
+        setPortfolio([]);
+      } 
+      finally 
+      {
+        setLoading(false);
+      }
     };
-    return (
-        <Paper sx={{ p: 3, mt: 2 }}>
-        <Typography variant="h6" gutterBottom> Create Portfolio </Typography>
-        <form onSubmit={handleSubmit} noValidate>
-            <TextField fullWidth label="Portfolio Name" name="portfolio_name" value={formData.portfolio_name} onChange={handleChange} margin="normal" required />
-            <TextField fullWidth label="Initial Capital" type="number" name="initial_capital" value={formData.initial_capital} onChange={handleChange} margin="normal" required />
-            <TextField fullWidth label="Customer No" name="customer_no" value={formData.customer_no} onChange={handleChange} margin="normal" required />
-            <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>Save Portfolio</Button>
-        </form>
-        <Snackbar open={successOpen} autoHideDuration={4000} onClose={() => setSuccessOpen(false)}>
-            <Alert severity="success" onClose={() => setSuccessOpen(false)}>Portfolio created successfully!</Alert>
-        </Snackbar>
-        {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
-        </Paper>
-    );
+    fetchPortfolio();
+  }, []);
+  if (loading) return <CircularProgress />;
+  return (
+    <Paper style={{ padding: 20 }}>
+      <Typography
+          variant="h5"
+          mt={4}
+          mb={2}
+          sx={{
+              textAlign: "center",
+              background: 'linear-gradient(to right, #0f2027, #203a43, #2c5364)',
+              borderRadius: 2,
+              boxShadow: '0 0 12px rgba(0, 255, 170, 0.2)',
+              padding: "10px",
+              borderRadius: "8px",
+              fontWeight: "bold",
+              color: '#00ffcc',
+              fontWeight: 'bold',
+              textShadow: '0 0 3px #00ffcc',
+          }}
+      >
+        Portfolio
+      </Typography>
+      <Table>
+        <TableHead>
+          <TableRow sx={{
+              textAlign: "center",
+              background: 'linear-gradient(to right, #0f2027, #203a43, #2c5364)',
+              borderRadius: 2,
+              boxShadow: '0 0 12px rgba(0, 255, 170, 0.2)',
+              padding: "10px",
+              borderRadius: "8px",
+              fontWeight: "bold",
+              color: '#00ffcc',
+              fontWeight: 'bold',
+              textShadow: '0 0 3px #00ffcc',
+          }}>
+            <TableCell>Symbol</TableCell>
+            <TableCell>Quantity</TableCell>
+            <TableCell>Avg Buy Price</TableCell>
+            <TableCell>Current Value</TableCell>
+            <TableCell>Profit / Loss</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {portfolio.map((row, index) => (
+            <TableRow key={index}>
+              <TableCell>{row.symbol}</TableCell>
+              <TableCell>{row.quantity}</TableCell>
+              <TableCell>{row.avgBuyPrice.toFixed(2)}</TableCell>
+              <TableCell>{row.currentValue.toFixed(2)}</TableCell>
+              <TableCell
+                style={{ color: row.profitLoss >= 0 ? 'green' : 'red' }}
+              >
+              {row.profitLoss.toFixed(2)}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </Paper>
+  );
 }

@@ -1,8 +1,9 @@
 import express from 'express';
 import multer from 'multer';
-import * as ctrl from '../controllers/stock.controller.js';
+import { uploadCsvStock, getAllStocks} from '../controllers/stock.controller.js';
 const router = express.Router();
-const upload = multer({ dest: 'uploads/' });
-router.get('/', ctrl.list);
-router.post('/upload', upload.single('file'), ctrl.uploadCSV);
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+router.post('/upload', upload.single('file'), uploadCsvStock);
+router.get('/', getAllStocks);                          
 export default router;

@@ -1,0 +1,119 @@
+{    
+    "stock1":
+    {
+        "Date": "4-Jul-25",
+        "Symbol": "BATA",
+        "Code": "816",
+        "Company Name": "Bata (Pak) Ltd.",
+        "Open Price": "1497",
+        "High Price": "1497.49",
+        "Low Price": "1490",
+        "Close Price": "1490.02",
+        "Volume": "7090",
+        "Previous Close": "1494.35"
+    },
+    "stock2":
+    {
+        "Date": "4-Jul-25",
+        "Symbol": "BBFL",
+        "Code": "810",
+        "Company Name": "Big Bird Foods Ltd.",
+        "Open Price": "49.84",
+        "High Price": "50.5",
+        "Low Price": "49",
+        "Close Price": "50.31",
+        "Volume": "5232159",
+        "Previous Close": "49.58"
+    },
+    "stock3":
+    {
+        "Date": "4-Jul-25",
+        "Symbol": "BCL",
+        "Code": "808",
+        "Company Name": "Bolan Casting",
+        "Open Price": "98.12",
+        "High Price": "100.8",
+        "Low Price": "98.12",
+        "Close Price": "100.14",
+        "Volume": "51628",
+        "Previous Close": "100"
+    },
+    "stock4":
+    {
+        "Date": "4-Jul-25",
+        "Symbol": "BECO",
+        "Code": "808",
+        "Company Name": "Beco Steel Ltd",
+        "Open Price": "26",
+        "High Price": "26.59",
+        "Low Price": "22",
+        "Close Price": "26.59",
+        "Volume": "7489567",
+        "Previous Close": "24.17"
+    },
+    "stock5":
+    {
+        "Date": "4-Jul-25",
+        "Symbol": "BELA",
+        "Code": "802",
+        "Company Name": "Bela Automotive",
+        "Open Price": "121.06",
+        "High Price": "121.06",
+        "Low Price": "110",
+        "Close Price": "111.67",
+        "Volume": "906",
+        "Previous Close": "121.88"
+    },
+    "stock6":
+    {
+        "Date": "4-Jul-25",
+        "Symbol": "BERG",
+        "Code": "805",
+        "Company Name": "Berger Paints",
+        "Open Price": "110.5",
+        "High Price": "114.88",
+        "Low Price": "108.05",
+        "Close Price": "111.7",
+        "Volume": "176257",
+        "Previous Close": "110.42"
+    },
+    "stock7":
+    {
+        "Date": "4-Jul-25",
+        "Symbol": "BFAGRO",
+        "Code": "810",
+        "Company Name": "Barkat Frisian Agro",
+        "Open Price": "41.25",
+        "High Price": "41.9",
+        "Low Price": "40",
+        "Close Price": "40.92",
+        "Volume": "4634711",
+        "Previous Close": "41.17"
+    },
+    "stock8":
+    {
+        "Date": "4-Jul-25",
+        "Symbol": "BFBIO",
+        "Code": "823",
+        "Company Name": "BF Biosciences",
+        "Open Price": "173.49",
+        "High Price": "173.49",
+        "Low Price": "171.12",
+        "Close Price": "172.26",
+        "Volume": "194797",
+        "Previous Close": "172.55"
+    },
+    "stock9":
+    {
+        "Date": "4-Jul-25",
+        "Symbol": "BFMOD",
+        "Code": "819",
+        "Company Name": "B.F.Modaraba",
+        "Open Price": "10.79",
+        "High Price": "12.06",
+        "Low Price": "10.5",
+        "Close Price": "11.12",
+        "Volume": "38870",
+        "Previous Close": "10.96"
+    }
+}

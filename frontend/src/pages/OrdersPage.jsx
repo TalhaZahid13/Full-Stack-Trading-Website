@@ -1,12 +1,19 @@
-import OrderForm from '../components/Orders/OrderForm';
-import OrderHistory from '../components/Orders/OrderHistory';
-import { Container } from '@mui/material';
-export default function OrdersPage() 
-{
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+const OrdersPage = () => {
+  const navigate = useNavigate();
+
+  const handlePlaceOrder = () => 
+  {
+    <Link to="/CreateOrder">Place Trade Order</Link>
+    navigate('/CreateOrder'); // ✅ Correct route
+  };
+
   return (
-    <Container sx={{ mt: 3 }}>
-      <OrderForm />
-      <OrderHistory />
-    </Container>
+    <div>
+      <button onClick={handlePlaceOrder}>Place Order</button>
+    </div>
   );
-}
+};
+
+export default OrdersPage;
